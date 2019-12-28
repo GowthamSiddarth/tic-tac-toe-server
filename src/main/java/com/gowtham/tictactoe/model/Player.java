@@ -2,13 +2,21 @@ package com.gowtham.tictactoe.model;
 
 import com.gowtham.tictactoe.config.PlayerSymbol;
 
-public class Player {
-    private String name;
-    private PlayerSymbol playerSymbol;
+import java.util.UUID;
 
-    public Player(String name, PlayerSymbol playerSymbol) {
+public class Player {
+    private UUID id;
+    private String name;
+    private PlayerSymbol symbol;
+
+    public Player(UUID id, String name, PlayerSymbol symbol) {
+        this.id = id;
         this.name = name;
-        this.playerSymbol = playerSymbol;
+        this.symbol = symbol;
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -16,6 +24,6 @@ public class Player {
     }
 
     public PlayerSymbol getPlayerSymbol() {
-        return playerSymbol;
+        return symbol;
     }
 }
