@@ -9,10 +9,9 @@ public class Player {
     private String name;
     private PlayerSymbol symbol;
 
-    public Player(String name, PlayerSymbol symbol) {
+    public Player(String name) {
         this.id = UUID.randomUUID();
         this.name = name;
-        this.symbol = symbol;
     }
 
     public UUID getId() {
@@ -25,5 +24,9 @@ public class Player {
 
     public PlayerSymbol getPlayerSymbol() {
         return symbol;
+    }
+
+    public void setSymbol(PlayerSymbol symbol) {
+        this.symbol = symbol;
     }
 }
