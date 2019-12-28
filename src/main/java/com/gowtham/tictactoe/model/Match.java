@@ -6,14 +6,16 @@ import java.util.UUID;
 
 public class Match {
     private Player firstPlayer, secondPlayer;
-    private UUID roomId;
+    private UUID roomId, matchId;
     private List<Move> moves;
 
     public Match(Player firstPlayer, Player secondPlayer, UUID roomId) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.roomId = roomId;
+
         moves = new ArrayList<>();
+        matchId = UUID.randomUUID();
     }
 
     public Player getFirstPlayer() {

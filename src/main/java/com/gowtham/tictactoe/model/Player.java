@@ -9,8 +9,8 @@ public class Player {
     private String name;
     private PlayerSymbol symbol;
 
-    public Player(UUID id, String name, PlayerSymbol symbol) {
-        this.id = id;
+    public Player(String name, PlayerSymbol symbol) {
+        this.id = UUID.randomUUID();
         this.name = name;
         this.symbol = symbol;
     }
