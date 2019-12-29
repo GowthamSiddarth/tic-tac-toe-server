@@ -6,22 +6,21 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-public class Match {
+public class Game {
     @Value("${grid.size}")
     private int gridSize;
 
     private Player grid[][];
     private Player firstPlayer, secondPlayer;
-    private UUID roomId, matchId;
+    private UUID roomId;
     private List<Move> moves;
 
-    public Match(Player firstPlayer, Player secondPlayer, UUID roomId) {
+    public Game(Player firstPlayer, Player secondPlayer, UUID roomId) {
         this.firstPlayer = firstPlayer;
         this.secondPlayer = secondPlayer;
         this.roomId = roomId;
 
         moves = new ArrayList<>();
-        matchId = UUID.randomUUID();
         grid = new Player[gridSize][gridSize];
     }
 
