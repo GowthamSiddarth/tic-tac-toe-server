@@ -1,6 +1,6 @@
 package com.gowtham.tictactoe.model;
 
-import com.gowtham.tictactoe.config.PlayerSymbol;
+import com.gowtham.tictactoe.constants.PlayerSymbol;
 
 import java.util.UUID;
 

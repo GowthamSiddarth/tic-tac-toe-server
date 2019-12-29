@@ -1,10 +1,16 @@
 package com.gowtham.tictactoe.model;
 
+import org.springframework.beans.factory.annotation.Value;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class Match {
+    @Value("${grid.size}")
+    private int gridSize;
+
+    private Player grid[][];
     private Player firstPlayer, secondPlayer;
     private UUID roomId, matchId;
     private List<Move> moves;
@@ -16,6 +22,7 @@ public class Match {
 
         moves = new ArrayList<>();
         matchId = UUID.randomUUID();
+        grid = new Player[gridSize][gridSize];
     }
 
     public Player getFirstPlayer() {

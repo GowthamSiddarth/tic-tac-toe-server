@@ -1,4 +1,4 @@
-package com.gowtham.tictactoe.config;
+package com.gowtham.tictactoe.constants;
 
 public enum PlayerSymbol {
     CROSS,
