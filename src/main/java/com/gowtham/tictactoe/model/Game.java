@@ -11,29 +11,18 @@ public class Game {
     private int gridSize;
 
     private Player grid[][];
-    private Player firstPlayer, secondPlayer;
-    private UUID roomId;
+    private UUID gameRoomId;
     private List<Move> moves;
 
-    public Game(Player firstPlayer, Player secondPlayer, UUID roomId) {
-        this.firstPlayer = firstPlayer;
-        this.secondPlayer = secondPlayer;
-        this.roomId = roomId;
+    public Game(UUID gameRoomId) {
+        this.gameRoomId = gameRoomId;
 
         moves = new ArrayList<>();
         grid = new Player[gridSize][gridSize];
     }
 
-    public Player getFirstPlayer() {
-        return firstPlayer;
-    }
-
-    public Player getSecondPlayer() {
-        return secondPlayer;
-    }
-
-    public UUID getRoomId() {
-        return roomId;
+    public UUID getGameRoomId() {
+        return gameRoomId;
     }
 
     public boolean addMove(Move move) {
