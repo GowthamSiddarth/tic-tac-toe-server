@@ -1,5 +1,6 @@
 package com.gowtham.tictactoe.controller.game;
 
+import com.gowtham.tictactoe.constants.GameStatus;
 import com.gowtham.tictactoe.constants.PlayerSymbol;
 import com.gowtham.tictactoe.helper.playersymbol.PlayerSymbolHelper;
 import com.gowtham.tictactoe.helper.responsewrapper.MessageResponse;
@@ -76,7 +77,14 @@ public class GameController {
         Player grid[][] = game.getGrid();
         grid[row][col] = player;
         game.addMove(new Move(player, row, col));
+        GameStatus gameStatus = game.getGameStatus();
 
+        Map<String, String> innerRespObj = new HashMap<>();
+        innerRespObj.put("game_status", gameStatus.toString());
+        if (GameStatus.DETERMINED == gameStatus) {
+           innerRespObj.put("winner", player.getPlayerSymbol().toString());
+        }
 
+        return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
     }
 }
