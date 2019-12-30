@@ -7,10 +7,17 @@ import java.util.UUID;
 
 public class GameRoom {
     private Player firstPlayer, secondPlayer;
-    private String password;
 
     public GameRoom(Player firstPlayer) {
         this.firstPlayer = firstPlayer;
+    }
+
+    public Player getFirstPlayer() {
+        return firstPlayer;
+    }
+
+    public Player getSecondPlayer() {
+        return secondPlayer;
     }
 
     public void setSecondPlayer(Player secondPlayer) {

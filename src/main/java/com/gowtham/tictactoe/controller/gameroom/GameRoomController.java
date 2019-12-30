@@ -37,4 +37,22 @@ public class GameRoomController {
         respObj.put("game_room_id", gameRoomId);
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, respObj));
     }
+
+    @PostMapping(value = "/join-game-room", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    ResponseEntity<Object> joinGameRoom(@RequestParam Map<String, String> requestBody) {
+        UUID gameRoomId = UUID.fromString(requestBody.get("game_room_id"));
+        GameRoom gameRoom = AppState.getInstance().getGameRoomMap().get(gameRoomId);
+
+        if (null == gameRoom) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Game Room not found"));
+        } else if (null == gameRoom.getFirstPlayer() || null != gameRoom.getSecondPlayer()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "Game Room not empty"));
+        }
+
+        UUID secondPlayerId = UUID.fromString(requestBody.get("secondPlayerId"));
+        Player secondPlayer = AppState.getInstance().getPlayerMap().get(secondPlayerId);
+        gameRoom.setSecondPlayer(secondPlayer);
+
+        return ResponseEntity.ok().body(new MessageResponse(true, "Joined GameRoom successfully"));
+    }
 }
