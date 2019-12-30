@@ -52,7 +52,8 @@ public class GameController {
             currPlayer.setPlayerSymbol(currPlayerSymbol);
         }
 
-        UUID gameId = UUID.randomUUID();
+        UUID gameId = null == otherPlayer.getGameId() ? UUID.randomUUID() : otherPlayer.getGameId();
+        currPlayer.setGameId(gameId);
         AppState.getInstance().getGameMap().put(gameId, new Game(gameRoom.getFirstPlayer(), gameRoom.getSecondPlayer(), gameRoomId));
 
         Map<String, String> innerRespObj = new HashMap<>();
