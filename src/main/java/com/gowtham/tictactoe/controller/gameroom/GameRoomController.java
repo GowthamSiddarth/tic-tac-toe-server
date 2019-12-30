@@ -40,7 +40,7 @@ public class GameRoomController {
 
     @PostMapping(value = "/join-game-room", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Object> joinGameRoom(@RequestParam Map<String, String> requestBody) {
-        UUID gameRoomId = UUID.fromString(requestBody.get("game_room_id"));
+        UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
         GameRoom gameRoom = AppState.getInstance().getGameRoomMap().get(gameRoomId);
 
         if (null == gameRoom) {
@@ -51,6 +51,15 @@ public class GameRoomController {
 
         UUID secondPlayerId = UUID.fromString(requestBody.get("secondPlayerId"));
         Player secondPlayer = AppState.getInstance().getPlayerMap().get(secondPlayerId);
+
+        if (null == secondPlayer) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Player not found"));
+        }
+
+        if (secondPlayer == gameRoom.getFirstPlayer()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(new MessageResponse(false, "First Player and Second Player cannot be the same"));
+        }
+
         gameRoom.setSecondPlayer(secondPlayer);
 
         return ResponseEntity.ok().body(new MessageResponse(true, "Joined GameRoom successfully"));
