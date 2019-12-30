@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class Game {
-    @Value("${grid.size}")
-    private int gridSize;
+    private final int gridSize = 3;
 
     private Player grid[][];
     private UUID gameRoomId;
