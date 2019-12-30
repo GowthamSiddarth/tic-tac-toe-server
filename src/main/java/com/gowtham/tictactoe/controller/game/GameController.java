@@ -6,6 +6,7 @@ import com.gowtham.tictactoe.helper.responsewrapper.MessageResponse;
 import com.gowtham.tictactoe.helper.responsewrapper.ObjectResponse;
 import com.gowtham.tictactoe.model.Game;
 import com.gowtham.tictactoe.model.GameRoom;
+import com.gowtham.tictactoe.model.Move;
 import com.gowtham.tictactoe.model.Player;
 import com.gowtham.tictactoe.state.AppState;
 import org.springframework.http.HttpStatus;
@@ -60,5 +61,22 @@ public class GameController {
         innerRespObj.put("game_id", gameId.toString());
         innerRespObj.put("player_symbol", currPlayer.getPlayerSymbol().toString());
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
+    }
+
+    @PostMapping(value = "/make-a-move", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> makeAMove(@RequestParam Map<String, String> requestBody) {
+        UUID playerId = UUID.fromString(requestBody.get("playerId"));
+        UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
+        UUID gameId = UUID.fromString(requestBody.get("gameId"));
+        int row = Integer.parseInt(requestBody.get("row"));
+        int col = Integer.parseInt(requestBody.get("col"));
+
+        Player player = AppState.getInstance().getPlayerMap().get(playerId);
+        Game game = AppState.getInstance().getGameMap().get(gameId);
+        Player grid[][] = game.getGrid();
+        grid[row][col] = player;
+        game.addMove(new Move(player, row, col));
+
+
     }
 }
