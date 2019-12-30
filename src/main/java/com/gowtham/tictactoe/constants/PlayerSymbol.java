@@ -1,6 +1,16 @@
 package com.gowtham.tictactoe.constants;
 
 public enum PlayerSymbol {
-    CROSS,
-    CIRCLE
+    CROSS("X"),
+    CIRCLE("O");
+
+    private String playerSymbol;
+
+    PlayerSymbol(String playerSymbol) {
+        this.playerSymbol = playerSymbol;
+    }
+
+    public String getPlayerSymbol() {
+        return playerSymbol;
+    }
 }

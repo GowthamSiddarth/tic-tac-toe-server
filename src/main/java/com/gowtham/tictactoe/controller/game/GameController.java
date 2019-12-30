@@ -1,6 +1,7 @@
 package com.gowtham.tictactoe.controller.game;
 
 import com.gowtham.tictactoe.constants.PlayerSymbol;
+import com.gowtham.tictactoe.helper.playersymbol.PlayerSymbolHelper;
 import com.gowtham.tictactoe.helper.responsewrapper.MessageResponse;
 import com.gowtham.tictactoe.helper.responsewrapper.ObjectResponse;
 import com.gowtham.tictactoe.model.Game;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 @RestController
@@ -28,8 +30,8 @@ public class GameController {
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
         UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
 
-        Player player = AppState.getInstance().getPlayerMap().get(playerId);
-        if (null == player) {
+        Player currPlayer = AppState.getInstance().getPlayerMap().get(playerId);
+        if (null == currPlayer) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Player not found"));
         }
 
@@ -38,16 +40,24 @@ public class GameController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Game Room not found"));
         }
 
-        if (player != gameRoom.getFirstPlayer() && player != gameRoom.getSecondPlayer()) {
+        if (currPlayer != gameRoom.getFirstPlayer() && currPlayer != gameRoom.getSecondPlayer()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "Player mismatch with Game Room"));
+        }
+
+        Player otherPlayer = currPlayer == gameRoom.getFirstPlayer() ? gameRoom.getSecondPlayer() : gameRoom.getFirstPlayer();
+        if (null != otherPlayer.getPlayerSymbol()) {
+            currPlayer.setPlayerSymbol(PlayerSymbolHelper.getComplimentarySymbol(otherPlayer.getPlayerSymbol()));
+        } else {
+            PlayerSymbol currPlayerSymbol = PlayerSymbol.values()[new Random().nextInt(PlayerSymbol.values().length)];
+            currPlayer.setPlayerSymbol(currPlayerSymbol);
         }
 
         UUID gameId = UUID.randomUUID();
         AppState.getInstance().getGameMap().put(gameId, new Game(gameRoom.getFirstPlayer(), gameRoom.getSecondPlayer(), gameRoomId));
 
-        // Assign symbols
         Map<String, String> innerRespObj = new HashMap<>();
         innerRespObj.put("game_id", gameId.toString());
+        innerRespObj.put("player_symbol", currPlayer.getPlayerSymbol().toString());
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
     }
 }
