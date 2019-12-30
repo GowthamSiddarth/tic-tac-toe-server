@@ -11,9 +11,6 @@ public class GameRoom {
 
     public GameRoom(Player firstPlayer) {
         this.firstPlayer = firstPlayer;
-
-        password = UUID.randomUUID().toString();
-        password = password.substring(0, password.indexOf("-"));
     }
 
     public void setSecondPlayer(Player secondPlayer) {
