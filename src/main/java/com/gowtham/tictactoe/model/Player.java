@@ -7,6 +7,7 @@ import java.util.UUID;
 public class Player {
     private String name;
     private PlayerSymbol symbol;
+    private UUID gameRoomId;
 
     public Player(String name) {
         this.name = name;
@@ -20,7 +21,15 @@ public class Player {
         return symbol;
     }
 
-    public void setSymbol(PlayerSymbol symbol) {
+    public void setPlayerSymbol(PlayerSymbol symbol) {
         this.symbol = symbol;
+    }
+
+    public void setGameRoomId(UUID gameRoomId) {
+        this.gameRoomId = gameRoomId;
+    }
+
+    public UUID getGameRoomId() {
+        return gameRoomId;
     }
 }
