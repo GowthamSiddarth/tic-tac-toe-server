@@ -32,4 +32,8 @@ public class Player {
     public UUID getGameRoomId() {
         return gameRoomId;
     }
+
+    public boolean isInGameRoom() {
+        return null != gameRoomId;
+    }
 }

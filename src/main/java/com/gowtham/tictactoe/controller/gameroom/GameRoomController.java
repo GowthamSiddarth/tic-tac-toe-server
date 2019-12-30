@@ -25,13 +25,16 @@ public class GameRoomController {
 
         if (null == firstPlayer) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Player not found"));
+        } else if (firstPlayer.isInGameRoom()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "Player already in a GameRoom"));
         }
 
-        UUID roomId = UUID.randomUUID();
-        AppState.getInstance().getGameRoomMap().put(roomId, new GameRoom(firstPlayer));
+        UUID gameRoomId = UUID.randomUUID();
+        AppState.getInstance().getGameRoomMap().put(gameRoomId, new GameRoom(firstPlayer));
+        firstPlayer.setGameRoomId(gameRoomId);
 
         Map<String, Object> respObj = new HashMap<>();
-        respObj.put("roomId", roomId);
+        respObj.put("game_room_id", gameRoomId);
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, respObj));
     }
 }
