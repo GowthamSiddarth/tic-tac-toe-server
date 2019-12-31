@@ -23,6 +23,8 @@ public class GameRoomController {
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
         Player firstPlayer = AppState.getInstance().getPlayerMap().get(playerId);
 
+        String gameRoomName = requestBody.get("gameRoomName");
+
         if (null == firstPlayer) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Player not found"));
         } else if (firstPlayer.isInGameRoom()) {
@@ -30,7 +32,7 @@ public class GameRoomController {
         }
 
         UUID gameRoomId = UUID.randomUUID();
-        AppState.getInstance().getGameRoomMap().put(gameRoomId, new GameRoom(firstPlayer));
+        AppState.getInstance().getGameRoomMap().put(gameRoomId, new GameRoom(gameRoomName, firstPlayer));
         firstPlayer.setGameRoomId(gameRoomId);
 
         Map<String, Object> respObj = new HashMap<>();
@@ -49,7 +51,7 @@ public class GameRoomController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "Game Room not empty"));
         }
 
-        UUID secondPlayerId = UUID.fromString(requestBody.get("secondPlayerId"));
+        UUID secondPlayerId = UUID.fromString(requestBody.get("playerId"));
         Player secondPlayer = AppState.getInstance().getPlayerMap().get(secondPlayerId);
 
         if (null == secondPlayer) {

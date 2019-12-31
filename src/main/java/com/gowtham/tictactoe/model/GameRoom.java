@@ -7,8 +7,10 @@ import java.util.UUID;
 
 public class GameRoom {
     private Player firstPlayer, secondPlayer;
+    private String name;
 
-    public GameRoom(Player firstPlayer) {
+    public GameRoom(String name, Player firstPlayer) {
+        this.name = name;
         this.firstPlayer = firstPlayer;
     }
 
@@ -22,6 +24,14 @@ public class GameRoom {
 
     public void setSecondPlayer(Player secondPlayer) {
         this.secondPlayer = secondPlayer;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public Game addGame(Game game) {
