@@ -24,7 +24,7 @@ public class PlayerController {
         AppState.getInstance().getPlayerMap().put(playerId, new Player(playerName));
 
         Map<String, Object> respObj = new HashMap<>();
-        respObj.put("playerId", playerId);
+        respObj.put("player_id", playerId);
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, respObj));
     }
 }
