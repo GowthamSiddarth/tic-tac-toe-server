@@ -20,6 +20,9 @@ public class GameRoomController {
 
     @PostMapping(value = "/create-game-room", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<Object> createGameRoom(@RequestParam Map<String, String> requestBody) {
+        if (!requestBody.containsKey("playerId")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "playerId param is missing"));
+        }
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
         Player firstPlayer = AppState.getInstance().getPlayerMap().get(playerId);
 
