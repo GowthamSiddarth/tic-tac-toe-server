@@ -27,7 +27,7 @@ import java.util.UUID;
 @RequestMapping("/api/v1/v0")
 public class GameController {
 
-    @PostMapping(value = "/start-game", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/start-new-game", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> startGame(@RequestParam Map<String, String> requestBody) {
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
         UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
@@ -47,7 +47,9 @@ public class GameController {
         }
 
         Player otherPlayer = currPlayer == gameRoom.getFirstPlayer() ? gameRoom.getSecondPlayer() : gameRoom.getFirstPlayer();
-        if (null != otherPlayer.getPlayerSymbol()) {
+        if (null == otherPlayer) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new MessageResponse(false, "Waiting for second player to join"));
+        } else if (null != otherPlayer.getPlayerSymbol()) {
             currPlayer.setPlayerSymbol(PlayerSymbolHelper.getComplimentarySymbol(otherPlayer.getPlayerSymbol()));
         } else {
             PlayerSymbol currPlayerSymbol = PlayerSymbol.values()[new Random().nextInt(PlayerSymbol.values().length)];
