@@ -10,7 +10,7 @@ import java.util.UUID;
 public class Game {
     private final int gridSize = 3;
 
-    private Player grid[][];
+    private Player grid[][], nextTurn;
     private UUID gameRoomId;
     private List<Move> moves;
 
@@ -89,5 +89,13 @@ public class Game {
 
     public Player[][] getGrid() {
         return grid;
+    }
+
+    public void setNextTurn(Player nextTurn) {
+        this.nextTurn = nextTurn;
+    }
+
+    public Player getNextTurn() {
+        return nextTurn;
     }
 }
