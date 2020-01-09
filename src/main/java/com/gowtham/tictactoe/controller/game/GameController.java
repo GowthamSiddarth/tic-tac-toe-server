@@ -56,10 +56,16 @@ public class GameController {
             currPlayer.setPlayerSymbol(currPlayerSymbol);
         }
 
-        UUID gameId = null == otherPlayer.getGameId() ? UUID.randomUUID() : otherPlayer.getGameId();
-        currPlayer.setGameId(gameId);
-        Game game = new Game(gameRoomId);
-        AppState.getInstance().getGameMap().put(gameId, game);
+        Game game;
+        UUID gameId;
+        if (null == otherPlayer.getGameId()) {
+            gameId = UUID.randomUUID();
+            game = new Game(gameRoomId);
+            AppState.getInstance().getGameMap().put(gameId, game);
+        } else {
+            gameId = otherPlayer.getGameId();
+            game = AppState.getInstance().getGameMap().get(gameId);
+        }
 
         Player nextTurn = new Player[]{gameRoom.getFirstPlayer(), gameRoom.getSecondPlayer()}[new Random().nextInt(2)];
         game.setNextTurn(nextTurn);
