@@ -86,7 +86,7 @@ public class GameController {
     @PostMapping(value = "/make-a-move", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> makeAMove(@RequestParam Map<String, String> requestBody) {
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
-        UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
+        //UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
         UUID gameId = UUID.fromString(requestBody.get("gameId"));
         int row = Integer.parseInt(requestBody.get("row"));
         int col = Integer.parseInt(requestBody.get("col"));
@@ -104,6 +104,19 @@ public class GameController {
             innerRespObj.put("winner", player.getPlayerSymbol().toString());
         }
 
+        return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
+    }
+
+    @PostMapping(value = "/is-my-turn", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> isMyTurn(@RequestParam Map<String, String> requestBody) {
+        UUID playerId = UUID.fromString(requestBody.get("playerId"));
+        UUID gameId = UUID.fromString(requestBody.get("gameId"));
+
+        Game game = AppState.getInstance().getGameMap().get(gameId);
+        Player player = AppState.getInstance().getPlayerMap().get(playerId);
+
+        Map<String, String> innerRespObj = new HashMap<>();
+        innerRespObj.put("my_turn", Boolean.toString(player == game.getNextTurn()));
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
     }
 }
