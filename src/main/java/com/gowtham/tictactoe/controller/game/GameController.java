@@ -86,23 +86,34 @@ public class GameController {
     @PostMapping(value = "/make-a-move", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> makeAMove(@RequestParam Map<String, String> requestBody) {
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
-        //UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
+        UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
         UUID gameId = UUID.fromString(requestBody.get("gameId"));
         int row = Integer.parseInt(requestBody.get("row"));
         int col = Integer.parseInt(requestBody.get("col"));
 
-        Player player = AppState.getInstance().getPlayerMap().get(playerId);
+        Player currPlayer = AppState.getInstance().getPlayerMap().get(playerId);
+        GameRoom gameRoom = AppState.getInstance().getGameRoomMap().get(gameRoomId);
         Game game = AppState.getInstance().getGameMap().get(gameId);
+        Move move = new Move(currPlayer, row, col);
+
+        if (game.getMoves().contains(move)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "Game Board Location Already Used!"));
+        }
+
         Player grid[][] = game.getGrid();
-        grid[row][col] = player;
-        game.addMove(new Move(player, row, col));
+        grid[row][col] = currPlayer;
+        game.addMove(move);
         GameStatus gameStatus = game.getGameStatus();
 
         Map<String, String> innerRespObj = new HashMap<>();
         innerRespObj.put("game_status", gameStatus.toString());
+        innerRespObj.put("my_turn", Boolean.toString(false));
         if (GameStatus.DETERMINED == gameStatus) {
-            innerRespObj.put("winner", player.getPlayerSymbol().toString());
+            innerRespObj.put("winner", currPlayer.getPlayerSymbol().toString());
         }
+
+        Player otherPlayer = currPlayer == gameRoom.getFirstPlayer() ? gameRoom.getSecondPlayer() : gameRoom.getFirstPlayer();
+        game.setNextTurn(otherPlayer);
 
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
     }

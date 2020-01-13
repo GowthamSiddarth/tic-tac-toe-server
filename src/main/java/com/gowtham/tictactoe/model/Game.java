@@ -1,7 +1,6 @@
 package com.gowtham.tictactoe.model;
 
 import com.gowtham.tictactoe.constants.GameStatus;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -85,6 +84,10 @@ public class Game {
 
     public boolean addMove(Move move) {
         return moves.add(move);
+    }
+
+    public List<Move> getMoves() {
+        return moves;
     }
 
     public Player[][] getGrid() {

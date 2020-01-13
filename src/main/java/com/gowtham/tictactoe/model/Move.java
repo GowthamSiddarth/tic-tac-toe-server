@@ -21,4 +21,10 @@ public class Move {
     public int getRow() {
         return row;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        Move moveObj = (Move) obj;
+        return moveObj.getRow() == row && moveObj.getCol() == col;
+    }
 }
