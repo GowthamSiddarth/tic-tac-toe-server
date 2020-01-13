@@ -61,19 +61,25 @@ public class GameController {
         if (null == otherPlayer.getGameId()) {
             gameId = UUID.randomUUID();
             game = new Game(gameRoomId);
+
+            otherPlayer.setGameId(gameId);
+            currPlayer.setGameId(gameId);
+
             AppState.getInstance().getGameMap().put(gameId, game);
         } else {
             gameId = otherPlayer.getGameId();
             game = AppState.getInstance().getGameMap().get(gameId);
         }
 
-        Player nextTurn = new Player[]{gameRoom.getFirstPlayer(), gameRoom.getSecondPlayer()}[new Random().nextInt(2)];
-        game.setNextTurn(nextTurn);
+        if (null == game.getNextTurn()) {
+            Player nextTurn = new Player[]{gameRoom.getFirstPlayer(), gameRoom.getSecondPlayer()}[new Random().nextInt(2)];
+            game.setNextTurn(nextTurn);
+        }
 
         Map<String, String> innerRespObj = new HashMap<>();
         innerRespObj.put("game_id", gameId.toString());
         innerRespObj.put("player_symbol", currPlayer.getPlayerSymbol().toString());
-        innerRespObj.put("my_turn", Boolean.toString(currPlayer == nextTurn));
+        innerRespObj.put("my_turn", Boolean.toString(currPlayer == game.getNextTurn()));
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
     }
 
