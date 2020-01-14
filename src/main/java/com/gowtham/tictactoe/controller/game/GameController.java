@@ -126,13 +126,16 @@ public class GameController {
         Game game = AppState.getInstance().getGameMap().get(gameId);
         Player player = AppState.getInstance().getPlayerMap().get(playerId);
 
-        Move lastMove = game.getMoves().get(game.getMoves().size() - 1);
-
         Map<String, String> innerRespObj = new HashMap<>();
         innerRespObj.put("my_turn", Boolean.toString(player == game.getNextTurn()));
-        innerRespObj.put("last_move_symbol", lastMove.getPlayer().getPlayerSymbol().toString());
-        innerRespObj.put("last_move_row", Integer.toString(lastMove.getRow()));
-        innerRespObj.put("last_move_col", Integer.toString(lastMove.getCol()));
+
+        if (!game.getMoves().isEmpty()) {
+            Move lastMove = game.getMoves().get(game.getMoves().size() - 1);
+            innerRespObj.put("last_move_symbol", lastMove.getPlayer().getPlayerSymbol().toString());
+            innerRespObj.put("last_move_row", Integer.toString(lastMove.getRow()));
+            innerRespObj.put("last_move_col", Integer.toString(lastMove.getCol()));
+        }
+
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
     }
 }
