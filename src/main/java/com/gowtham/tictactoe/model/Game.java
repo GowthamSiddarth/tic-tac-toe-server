@@ -48,6 +48,7 @@ public class Game {
 
             if (grid.length == count) {
                 gameStatus = GameStatus.DETERMINED;
+                return;
             }
         }
 
@@ -61,6 +62,7 @@ public class Game {
 
             if (grid.length == count) {
                 gameStatus = GameStatus.DETERMINED;
+                return;
             }
         }
 
@@ -72,6 +74,7 @@ public class Game {
 
             if (grid.length == count) {
                 gameStatus = GameStatus.DETERMINED;
+                return;
             }
         }
 
@@ -83,6 +86,7 @@ public class Game {
 
             if (grid.length == count) {
                 gameStatus = GameStatus.DETERMINED;
+                return;
             }
         }
 
