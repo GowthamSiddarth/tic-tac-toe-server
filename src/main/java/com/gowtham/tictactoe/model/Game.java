@@ -13,6 +13,8 @@ public class Game {
     private UUID gameRoomId;
     private List<Move> moves;
 
+    private GameStatus gameStatus;
+
     public Game(UUID gameRoomId) {
         this.gameRoomId = gameRoomId;
 
@@ -24,7 +26,12 @@ public class Game {
         return gameRoomId;
     }
 
-    public GameStatus getGameStatus() {
+    public void computeGameStatus() {
+        if (moves.isEmpty()) {
+            gameStatus = GameStatus.RUNNING;
+            return;
+        }
+
         Player lastMovePlayer = moves.get(moves.size() - 1).getPlayer();
         int count, filled = 0;
         for (int row = 0; row < grid.length; ++row) {
@@ -40,7 +47,7 @@ public class Game {
             }
 
             if (grid.length == count) {
-                return GameStatus.DETERMINED;
+                gameStatus = GameStatus.DETERMINED;
             }
         }
 
@@ -53,7 +60,7 @@ public class Game {
             }
 
             if (grid.length == count) {
-                return GameStatus.DETERMINED;
+                gameStatus = GameStatus.DETERMINED;
             }
         }
 
@@ -64,7 +71,7 @@ public class Game {
             }
 
             if (grid.length == count) {
-                return GameStatus.DETERMINED;
+                gameStatus = GameStatus.DETERMINED;
             }
         }
 
@@ -75,11 +82,15 @@ public class Game {
             }
 
             if (grid.length == count) {
-                return GameStatus.DETERMINED;
+                gameStatus = GameStatus.DETERMINED;
             }
         }
 
-        return filled == (grid.length * grid.length) ? GameStatus.UNDETERMINED : GameStatus.RUNNING;
+        gameStatus = filled == (grid.length * grid.length) ? GameStatus.UNDETERMINED : GameStatus.RUNNING;
+    }
+
+    public GameStatus getGameStatus() {
+        return gameStatus;
     }
 
     public boolean addMove(Move move) {

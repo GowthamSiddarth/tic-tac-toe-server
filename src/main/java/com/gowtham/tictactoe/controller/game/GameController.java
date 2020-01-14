@@ -103,6 +103,8 @@ public class GameController {
         Player grid[][] = game.getGrid();
         grid[row][col] = currPlayer;
         game.addMove(move);
+
+        game.computeGameStatus();
         GameStatus gameStatus = game.getGameStatus();
 
         Map<String, String> innerRespObj = new HashMap<>();
@@ -121,13 +123,28 @@ public class GameController {
     @PostMapping(value = "/is-my-turn", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> isMyTurn(@RequestParam Map<String, String> requestBody) {
         UUID playerId = UUID.fromString(requestBody.get("playerId"));
+        UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
         UUID gameId = UUID.fromString(requestBody.get("gameId"));
 
+        Player currPlayer = AppState.getInstance().getPlayerMap().get(playerId);
+        GameRoom gameRoom = AppState.getInstance().getGameRoomMap().get(gameRoomId);
         Game game = AppState.getInstance().getGameMap().get(gameId);
-        Player player = AppState.getInstance().getPlayerMap().get(playerId);
+
+        Player otherPlayer = currPlayer == gameRoom.getFirstPlayer() ? gameRoom.getSecondPlayer() : gameRoom.getFirstPlayer();
+
+        if (null == game.getGameStatus()) {
+            game.computeGameStatus();
+        }
+
+        GameStatus gameStatus = game.getGameStatus();
 
         Map<String, String> innerRespObj = new HashMap<>();
-        innerRespObj.put("my_turn", Boolean.toString(player == game.getNextTurn()));
+        innerRespObj.put("game_status", gameStatus.toString());
+        innerRespObj.put("my_turn", Boolean.toString(currPlayer == game.getNextTurn() && gameStatus.equals(GameStatus.RUNNING)));
+
+        if (GameStatus.DETERMINED == gameStatus) {
+            innerRespObj.put("winner", otherPlayer.getPlayerSymbol().toString());
+        }
 
         if (!game.getMoves().isEmpty()) {
             Move lastMove = game.getMoves().get(game.getMoves().size() - 1);
