@@ -2,6 +2,7 @@ package com.gowtham.tictactoe.controller.game;
 
 import com.gowtham.tictactoe.constants.GameStatus;
 import com.gowtham.tictactoe.constants.PlayerSymbol;
+import com.gowtham.tictactoe.helper.appgarbagecollector.GarbageCollector;
 import com.gowtham.tictactoe.helper.playersymbol.PlayerSymbolHelper;
 import com.gowtham.tictactoe.helper.responsewrapper.MessageResponse;
 import com.gowtham.tictactoe.helper.responsewrapper.ObjectResponse;
@@ -154,5 +155,35 @@ public class GameController {
         }
 
         return ResponseEntity.ok().body(ObjectResponse.jsonify(true, innerRespObj));
+    }
+
+    @PostMapping(value = "/quit-game", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Object> quitGame(@RequestParam Map<String, String> requestBody) {
+        UUID playerId = UUID.fromString(requestBody.get("playerId"));
+        UUID gameRoomId = UUID.fromString(requestBody.get("gameRoomId"));
+        UUID gameId = UUID.fromString(requestBody.get("gameId"));
+
+        Player currPlayer = AppState.getInstance().getPlayerMap().get(playerId);
+        GameRoom gameRoom = AppState.getInstance().getGameRoomMap().get(gameRoomId);
+
+        if (gameRoom.getFirstPlayer().equals(currPlayer)) {
+            gameRoom.setFirstPlayer(null);
+        } else if (gameRoom.getSecondPlayer().equals(currPlayer)) {
+            gameRoom.setSecondPlayer(null);
+        } else {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse(false, "Player and GameRoom mismatch occurred"));
+        }
+
+        Player removedPlayer = GarbageCollector.removePlayerFromState(playerId);
+        if (null == removedPlayer) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Player not found"));
+        }
+
+        Game removedGame = GarbageCollector.removeGameFromState(gameId);
+        if (null == removedGame) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new MessageResponse(false, "Game not found"));
+        }
+
+        return ResponseEntity.ok().body(ObjectResponse.jsonify(true,  removedPlayer.getName() + " has quit the game"));
     }
 }
