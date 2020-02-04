@@ -45,4 +45,15 @@ public class Player {
     public boolean isInGameRoom() {
         return null != gameRoomId;
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        } else if (null == obj || getClass() != obj.getClass()) {
+            return false;
+        } else {
+            Player otherPlayer = (Player) obj;
+            return name.equals(otherPlayer.getName());
+        }
+    }
 }
