@@ -53,7 +53,7 @@ public class Player {
             return false;
         } else {
             Player otherPlayer = (Player) obj;
-            return name.equals(otherPlayer.getName());
+            return name.equals(otherPlayer.name);
         }
     }
 }
