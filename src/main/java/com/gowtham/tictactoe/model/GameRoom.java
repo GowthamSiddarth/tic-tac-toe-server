@@ -18,6 +18,10 @@ public class GameRoom {
         return firstPlayer;
     }
 
+    public void setFirstPlayer(Player firstPlayer) {
+        this.firstPlayer = firstPlayer;
+    }
+
     public Player getSecondPlayer() {
         return secondPlayer;
     }
