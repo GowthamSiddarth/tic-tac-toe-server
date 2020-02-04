@@ -12,17 +12,17 @@ public class GarbageCollector {
 
     public static Game removeGameFromState(UUID gameId) {
         Map<UUID, Game> gameMap = AppState.getInstance().getGameMap();
-        return gameMap.remove(gameId.toString());
+        return gameMap.remove(gameId);
     }
 
     public static GameRoom removeGameRoomFromState(UUID gameRoomId) {
         Map<UUID, GameRoom> gameRoomMap = AppState.getInstance().getGameRoomMap();
-        return gameRoomMap.remove(gameRoomId.toString());
+        return gameRoomMap.remove(gameRoomId);
     }
 
     public static Player removePlayerFromState(UUID playerId) {
         Map<UUID, Player> playerMap = AppState.getInstance().getPlayerMap();
-        return playerMap.remove(playerId.toString());
+        return playerMap.remove(playerId);
     }
 
 }
